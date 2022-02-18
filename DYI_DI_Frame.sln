@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3EC4A187-59C6-4431-90AE-46BC1BC007A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{909BF540-8334-4585-B694-CA3922BF3AD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DYI_DI_Frame", "src\DYI_DI_Frame\DYI_DI_Frame.csproj", "{514C38CB-F56A-4FFA-B408-6BBCD8F02908}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiFrame", "src\DiFrame\DiFrame.csproj", "{D270D0B1-B341-444C-BF69-DB2FD3C28F63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiFrame.Tests", "test\DiFrame.Tests\DiFrame.Tests.csproj", "{EA5CDD1D-C0B2-451A-B754-8EF915E24C80}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{514C38CB-F56A-4FFA-B408-6BBCD8F02908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{514C38CB-F56A-4FFA-B408-6BBCD8F02908}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{514C38CB-F56A-4FFA-B408-6BBCD8F02908}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{514C38CB-F56A-4FFA-B408-6BBCD8F02908}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D270D0B1-B341-444C-BF69-DB2FD3C28F63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D270D0B1-B341-444C-BF69-DB2FD3C28F63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D270D0B1-B341-444C-BF69-DB2FD3C28F63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D270D0B1-B341-444C-BF69-DB2FD3C28F63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA5CDD1D-C0B2-451A-B754-8EF915E24C80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA5CDD1D-C0B2-451A-B754-8EF915E24C80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA5CDD1D-C0B2-451A-B754-8EF915E24C80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA5CDD1D-C0B2-451A-B754-8EF915E24C80}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{514C38CB-F56A-4FFA-B408-6BBCD8F02908} = {3EC4A187-59C6-4431-90AE-46BC1BC007A4}
+		{D270D0B1-B341-444C-BF69-DB2FD3C28F63} = {3EC4A187-59C6-4431-90AE-46BC1BC007A4}
+		{EA5CDD1D-C0B2-451A-B754-8EF915E24C80} = {909BF540-8334-4585-B694-CA3922BF3AD9}
+	EndGlobalSection
+EndGlobal
