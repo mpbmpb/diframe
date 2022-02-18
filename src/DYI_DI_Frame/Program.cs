@@ -5,7 +5,7 @@ using DYI_DI_Frame;
 var services = new ServiceCollection();
 
 services.AddSingleton<IConsoleWriter, ConsoleWriter>();
-services.AddSingleton<IdGeneratorService, IdGeneratorService>();
+services.AddSingleton<IdGeneratorService>();
 services.AddTransient<IIdGenerator, IdGeneratorService>();
 
 var serviceProvider = services.BuildServiceProvider();

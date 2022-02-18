@@ -13,7 +13,7 @@ public class ServiceProvider : IServiceProvider
         if (_singletonTypes.ContainsKey(serviceType))
             return _singletonTypes[serviceType].Value;
 
-        return _transientTypes[serviceType].Invoke();
+        return _transientTypes.GetValueOrDefault(serviceType)?.Invoke();
     }
     public T GetRequiredService<T>()
     {
@@ -21,12 +21,12 @@ public class ServiceProvider : IServiceProvider
     }
     public object GetRequiredService(Type serviceType)
     {
-        if (_singletonTypes.ContainsKey(serviceType))
-        {
-            return _singletonTypes[serviceType].Value ?? throw new InvalidOperationException("Service not found");
-        }
+        var service = GetService(serviceType);
 
-        return _transientTypes[serviceType].Invoke() ?? throw new InvalidOperationException("Service not found");
+        if (service is null)
+            throw new InvalidOperationException("Service not found");
+
+        return service;
     }
 
     internal void RegisterServices(ServiceCollection services)
@@ -38,7 +38,9 @@ public class ServiceProvider : IServiceProvider
                 case ServiceLifetime.Singleton:
                     var implementationTYpe = serviceDescriptor.ImplementationType;
                     var args = GetConstructorArguments(implementationTYpe);
-                    _singletonTypes[serviceDescriptor.ServiceType] =  new(Activator.CreateInstance(implementationTYpe, args));
+                    _singletonTypes[serviceDescriptor.ServiceType] =  new(Activator.CreateInstance(
+                        serviceDescriptor.ImplementationType, 
+                        GetConstructorArguments(serviceDescriptor.ImplementationType)));
                     continue;
                 
                 case ServiceLifetime.Transient:
