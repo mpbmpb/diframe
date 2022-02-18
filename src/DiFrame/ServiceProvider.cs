@@ -1,9 +1,9 @@
 namespace DiFrame;
 
-public class ServiceProvider : IServiceProvider
+public class ServiceProvider
 {
-    private Dictionary<Type, Lazy<object?>> _singletonTypes = new ();
-    private Dictionary<Type, Func<object?>> _transientTypes = new();
+    private readonly Dictionary<Type, Lazy<object?>> _singletonTypes = new ();
+    private readonly Dictionary<Type, Func<object?>> _transientTypes = new();
     public T? GetService<T>()
     {
         return (T?) GetService(typeof(T));
@@ -36,17 +36,33 @@ public class ServiceProvider : IServiceProvider
             switch (serviceDescriptor.Lifetime)
             {
                 case ServiceLifetime.Singleton:
-                    var implementationTYpe = serviceDescriptor.ImplementationType;
-                    var args = GetConstructorArguments(implementationTYpe);
+                    if (serviceDescriptor.Implementation is not null)
+                    {
+                        _singletonTypes[serviceDescriptor.ServiceType] = new(serviceDescriptor.Implementation);
+                        continue;
+                    }
+
+                    if (serviceDescriptor.ImplementationFactory is not null)
+                    {
+                        _singletonTypes[serviceDescriptor.ServiceType] =
+                            new(serviceDescriptor.ImplementationFactory(this));
+                        continue;
+                    }
+                    
                     _singletonTypes[serviceDescriptor.ServiceType] =  new(Activator.CreateInstance(
-                        serviceDescriptor.ImplementationType, 
-                        GetConstructorArguments(serviceDescriptor.ImplementationType)));
+                        serviceDescriptor.ImplementationType!, 
+                        GetConstructorArguments(serviceDescriptor.ImplementationType!)));
                     continue;
                 
                 case ServiceLifetime.Transient:
+                    if (serviceDescriptor.ImplementationFactory is not null)
+                    {
+                        _transientTypes[serviceDescriptor.ServiceType] = () => serviceDescriptor.ImplementationFactory(this);
+                        continue;
+                    }
                     _transientTypes[serviceDescriptor.ServiceType] = () => Activator.CreateInstance(
-                        serviceDescriptor.ImplementationType, 
-                        GetConstructorArguments(serviceDescriptor.ImplementationType));
+                        serviceDescriptor.ImplementationType!, 
+                        GetConstructorArguments(serviceDescriptor.ImplementationType!));
                     continue;
             }
 

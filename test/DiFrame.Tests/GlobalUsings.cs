@@ -1,3 +1,4 @@
+global using System;
 global using System.Linq;
 global using DiFrame.Tests.Helpers;
 global using FluentAssertions;

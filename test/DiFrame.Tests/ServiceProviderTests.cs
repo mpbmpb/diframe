@@ -1,4 +1,4 @@
-using System;
+using System.IO;
 
 namespace DiFrame.Tests;
 
@@ -84,6 +84,82 @@ public class ServiceProviderTests
     }
 
     [Fact]
+    public void RegisterServices_ShouldWork_WhenUsing_AddSingleton_WithNewObjectAsArgument()
+    {
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddSingleton(new ConsoleWriter());
+
+        var sut = serviceCollection.BuildServiceProvider();
+        var result = sut.GetService<ConsoleWriter>();
+
+        result.Should().BeOfType<ConsoleWriter>();
+    }
+    
+    [Fact]
+    public void RegisterServices_ShouldWork_WhenUsing_AddSingleton_WithEmbeddedNewObjectsAsArgument()
+    {
+        using var output = new StringWriter();
+        Console.SetOut(output);
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddSingleton(new IdGeneratorService(new ConsoleWriter()));
+
+        var sut = serviceCollection.BuildServiceProvider();
+        var service = sut.GetService<IdGeneratorService>();
+        var service2 = sut.GetService<IdGeneratorService>();
+        var result1 = service!.Id;
+        var result2 = service2!.Id;
+        service.Print();
+
+        service.Should().BeOfType<IdGeneratorService>();
+        result1.Should().Be(result2);
+        output.ToString().Should().Match(result1.ToString());
+    }
+    
+     [Fact]
+    public void RegisterServices_ShouldWork_WhenUsing_FactoryPattern_ForSingleton()
+    {
+        using var output = new StringWriter();
+        Console.SetOut(output);
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddSingleton<IConsoleWriter, ConsoleWriter>();
+        serviceCollection.AddSingleton(provider => 
+            new IdGeneratorService(provider.GetRequiredService<IConsoleWriter>()));
+
+        var sut = serviceCollection.BuildServiceProvider();
+        var service = sut.GetService<IdGeneratorService>();
+        var service2 = sut.GetService<IdGeneratorService>();
+        var result1 = service!.Id;
+        var result2 = service2!.Id;
+        service.Print();
+
+        service.Should().BeOfType<IdGeneratorService>();
+        result1.Should().Be(result2);
+        output.ToString().Should().Match(result1.ToString());
+    }
+    
+     [Fact]
+    public void RegisterServices_ShouldWork_WhenUsing_FactoryPattern_ForTransient()
+    {
+        using var output = new StringWriter();
+        Console.SetOut(output);
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddSingleton<IConsoleWriter, ConsoleWriter>();
+        serviceCollection.AddTransient(provider => 
+            new IdGeneratorService(provider.GetRequiredService<IConsoleWriter>()));
+
+        var sut = serviceCollection.BuildServiceProvider();
+        var service = sut.GetService<IdGeneratorService>();
+        var service2 = sut.GetService<IdGeneratorService>();
+        var result1 = service!.Id;
+        var result2 = service2!.Id;
+        service.Print();
+
+        service.Should().BeOfType<IdGeneratorService>();
+        result1.Should().NotBe(result2);
+        output.ToString().Should().Match(result1.ToString());
+    }
+    
+    [Fact]
     public void GetService_ShouldReturnNull_ForUnregisteredType()
     {
         var serviceCollection = new ServiceCollection();
@@ -113,4 +189,5 @@ public class ServiceProviderTests
         expectedException.Should().BeOfType<InvalidOperationException>();
         expectedException!.Message.Should().Match("Service not found");
     }
+    
 }

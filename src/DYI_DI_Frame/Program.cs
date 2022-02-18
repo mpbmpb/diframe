@@ -5,8 +5,8 @@ using DYI_DI_Frame;
 var services = new ServiceCollection();
 
 services.AddSingleton<IConsoleWriter, ConsoleWriter>();
-services.AddSingleton<IdGeneratorService>();
 services.AddTransient<IIdGenerator, IdGeneratorService>();
+services.AddSingleton(provider => new IdGeneratorService(provider.GetRequiredService<IConsoleWriter>()));
 
 var serviceProvider = services.BuildServiceProvider();
 
@@ -15,7 +15,6 @@ var singletonIdGen1 = serviceProvider.GetRequiredService<IdGeneratorService>();
 var singletonIdGen2 = serviceProvider.GetRequiredService<IdGeneratorService>();
 var transIdGen1 = serviceProvider.GetRequiredService<IIdGenerator>();
 var transIdGen2 = serviceProvider.GetRequiredService<IIdGenerator>();
-
 
 writer.Write("test singletonIdGen1: ");
 singletonIdGen1.Print();

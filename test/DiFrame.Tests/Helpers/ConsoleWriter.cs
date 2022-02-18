@@ -1,5 +1,3 @@
-using System;
-
 namespace DiFrame.Tests.Helpers;
 
 public class ConsoleWriter : IConsoleWriter
