@@ -112,7 +112,7 @@ public class ServiceProviderTests
 
         service.Should().BeOfType<IdGeneratorService>();
         result1.Should().Be(result2);
-        output.ToString().Should().Match(result1.ToString());
+        output.ToString().Should().Contain(result1.ToString());
     }
     
      [Fact]
@@ -134,7 +134,7 @@ public class ServiceProviderTests
 
         service.Should().BeOfType<IdGeneratorService>();
         result1.Should().Be(result2);
-        output.ToString().Should().Match(result1.ToString());
+        output.ToString().Should().Contain(result1.ToString());
     }
     
      [Fact]
@@ -156,7 +156,7 @@ public class ServiceProviderTests
 
         service.Should().BeOfType<IdGeneratorService>();
         result1.Should().NotBe(result2);
-        output.ToString().Should().Match(result1.ToString());
+        output.ToString().Should().Contain(result1.ToString());
     }
     
     [Fact]

@@ -29,6 +29,22 @@ public class ServiceCollectionTests
     }
 
     [Fact]
+    public void AddSingletonWithSingleType_ShouldReturnServiceCollection_WithCorrectTypesRegistered()
+    {
+        var sut = new ServiceCollection();
+        var expectedDescriptor = new ServiceDescriptor
+        {
+            ServiceType = typeof(IdGeneratorService),
+            ImplementationType = typeof(IdGeneratorService),
+            Lifetime = ServiceLifetime.Singleton
+        };
+
+        var result = sut.AddSingleton<IdGeneratorService>();
+
+        result.FirstOrDefault().Should().BeEquivalentTo(expectedDescriptor);
+    }
+
+    [Fact]
     public void AddTransient_ShouldReturnServiceCollection_WithCorrectLifetimeRegistered()
     {
         var sut = new ServiceCollection();
@@ -52,6 +68,23 @@ public class ServiceCollectionTests
 
         result.FirstOrDefault().Should().BeEquivalentTo(expectedDescriptor);
     }
+
+    [Fact]
+    public void AddTransientWithSingleType_ShouldReturnServiceCollection_WithCorrectTypesRegistered()
+    {
+        var sut = new ServiceCollection();
+        var expectedDescriptor = new ServiceDescriptor
+        {
+            ServiceType = typeof(IdGeneratorService),
+            ImplementationType = typeof(IdGeneratorService),
+            Lifetime = ServiceLifetime.Transient
+        };
+
+        var result = sut.AddTransient<IdGeneratorService>();
+
+        result.FirstOrDefault().Should().BeEquivalentTo(expectedDescriptor);
+    }
+
 
     [Fact]
     public void BuildServiceProvider_ShouldReturn_ServiceProvider()
@@ -122,4 +155,19 @@ public class ServiceCollectionTests
         result[1].Lifetime.Should().Be(ServiceLifetime.Transient);
     }
     
+    [Fact]
+    public void AddService_ShouldReturnServiceCollection_WithCorrectTypesRegistered()
+    {
+        var sut = new ServiceCollection();
+        var descriptor = new ServiceDescriptor
+        {
+            ServiceType = typeof(IIdGenerator),
+            ImplementationType = typeof(IdGeneratorService),
+            Lifetime = ServiceLifetime.Singleton
+        };
+
+        var result = sut.AddService(descriptor);
+
+        result.FirstOrDefault().Should().BeEquivalentTo(descriptor);
+    }
 }

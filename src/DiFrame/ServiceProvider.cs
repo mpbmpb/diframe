@@ -65,7 +65,6 @@ public class ServiceProvider
                         GetConstructorArguments(serviceDescriptor.ImplementationType!));
                     continue;
             }
-
         }
     }
 
